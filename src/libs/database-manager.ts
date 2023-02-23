@@ -23,9 +23,17 @@ const getDatabaseConnection = async (): Promise<EntityManager> => {
       useUTC: true,
       entities: [],
     });
-    return await dataSource.initialize().then(() => {
-      console.trace("new database connection maded");
-      return dataSource.manager;
-    });
+    return await dataSource
+      .initialize()
+      .then(() => {
+        console.trace("new database connection maded");
+        return dataSource.manager;
+      })
+      .catch((e) => {
+        console.debug(e, `error on connecting to database`);
+        throw new Error(e);
+      });
   }
 };
+
+export { getDatabaseConnection };
